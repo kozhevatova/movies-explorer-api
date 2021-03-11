@@ -5,10 +5,12 @@ const BadRequestError = require('../errors/bad-req-err');
 const NotUniqueEmailError = require('../errors/not-unique-email-err');
 const NotAuthorizedError = require('../errors/not-auth-err');
 const NotFoundError = require('../errors/not-found-err');
+const { userIdNotFoundMessage, emailExistsMessage } = require('../utils/constants');
+const { devJwtSecret } = require('../utils/config');
 
 const handleError = (err) => {
   if (err.name === 'MongoError') {
-    throw new NotUniqueEmailError('Указанная почта уже используется');
+    throw new NotUniqueEmailError(emailExistsMessage);
   }
   if (err.name === 'ValidationError' || err.name === 'CastError') {
     throw new BadRequestError(err.message);
@@ -16,7 +18,7 @@ const handleError = (err) => {
 };
 
 const handleIdNotFound = () => {
-  throw new NotFoundError('Нет пользователя с таким id');
+  throw new NotFoundError(userIdNotFoundMessage);
 };
 
 module.exports.createUser = (req, res, next) => {
@@ -59,7 +61,7 @@ module.exports.login = (req, res, next) => {
       // создание токена
       const { NODE_ENV, JWT_SECRET } = process.env;
       const token = jwt.sign({ _id: user._id },
-        NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret',
+        NODE_ENV === 'production' ? JWT_SECRET : devJwtSecret,
         { expiresIn: '7d' });
       res.send({ token });
     })

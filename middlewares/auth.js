@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const NotAuthorizedError = require('../errors/not-auth-err');
+const { devJwtSecret } = require('../utils/config');
 
 module.exports = (req, res, next) => {
   // авторизационный заголовок
@@ -14,7 +15,7 @@ module.exports = (req, res, next) => {
   const { NODE_ENV, JWT_SECRET } = process.env;
   try {
     payload = jwt.verify(token,
-      NODE_ENV === 'production' ? JWT_SECRET : 'dev-secret');
+      NODE_ENV === 'production' ? JWT_SECRET : devJwtSecret);
   } catch (err) {
     throw new NotAuthorizedError(err.message);
   }

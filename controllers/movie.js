@@ -2,6 +2,7 @@ const Movie = require('../models/movie');
 const BadRequestError = require('../errors/bad-req-err');
 const NotFoundError = require('../errors/not-found-err');
 const NotAllowedError = require('../errors/not-allowed-err');
+const { movieIdNotFoundMessage, movieNotAllowedMessage } = require('../utils/constants');
 
 const handleError = (err) => {
   if (err.name === 'ValidationError' || err.name === 'CastError') {
@@ -10,7 +11,7 @@ const handleError = (err) => {
 };
 
 const handleIdNotFound = () => {
-  throw new NotFoundError('Нет фильма с таким id');
+  throw new NotFoundError(movieIdNotFoundMessage);
 };
 
 module.exports.getSavedMovies = (req, res, next) => {
@@ -51,7 +52,7 @@ module.exports.deleteSavedMovieById = (req, res, next) => {
     .orFail(() => handleIdNotFound())
     .then((movie) => {
       if (movie.owner.toString() !== req.user._id) {
-        throw new NotAllowedError('Нет прав на удаление фильма');
+        throw new NotAllowedError(movieNotAllowedMessage);
       }
       Movie.findByIdAndRemove(req.params.movieId)
         .then((deletedMovie) => res.send(deletedMovie))

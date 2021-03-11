@@ -5,6 +5,7 @@ const userRouter = require('./user');
 const movieRouter = require('./movie');
 const { login, createUser } = require('../controllers/user');
 const NotFoundError = require('../errors/not-found-err');
+const { resourceNotFoundMessage } = require('../utils/constants');
 
 appRouter.post('/signin', celebrate({
   body: Joi.object().keys({
@@ -17,7 +18,7 @@ appRouter.post('/signup', celebrate({
   body: Joi.object().keys({
     email: Joi.string().email().required(),
     password: Joi.string().required().min(8),
-    name: Joi.string().min(2).max(30),
+    name: Joi.string().required().min(2).max(30),
   }),
 }), createUser);
 
@@ -35,7 +36,7 @@ appRouter.use('/movies', celebrate({
 }), auth, movieRouter);
 
 appRouter.use((req, res, next) => {
-  next(new NotFoundError('Запрашиваемый ресурс не найден'));
+  next(new NotFoundError(resourceNotFoundMessage));
 });
 
 module.exports = appRouter;

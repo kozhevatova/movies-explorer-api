@@ -6,12 +6,14 @@ const helmet = require('helmet');
 const { errors } = require('celebrate');
 const appRouter = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
+const { limiter } = require('./utils/limiter');
+const { dbName } = require('./utils/config');
 
 const { PORT = 3000 } = process.env;
 const app = express();
 
 // подключение к серверу mongo
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect(`mongodb://localhost:27017/${dbName}`, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
@@ -19,10 +21,10 @@ mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
 
 const options = {
   origin: ['http://localhost:3000',
-    'http://api.annakin.diploma.students.nomoredomains.monster',
-    'http://www.api.annakin.diploma.students.nomoredomains.monster',
-    'https://api.annakin.diploma.students.nomoredomains.monster',
-    'https://www.api.annakin.diploma.students.nomoredomains.monster'],
+    'http://annakin.diploma.students.nomoredomains.monster',
+    'http://www.annakin.diploma.students.nomoredomains.monster',
+    'https://annakin.diploma.students.nomoredomains.monster',
+    'https://www.annakin.diploma.students.nomoredomains.monster'],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   preflightContinue: false,
   optionsSuccessStatus: 204,
@@ -37,6 +39,8 @@ app.use(express.json());
 
 // логгер запросов
 app.use(requestLogger);
+
+app.use(limiter);
 
 // роут
 app.use('/', appRouter);
