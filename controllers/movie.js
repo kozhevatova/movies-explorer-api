@@ -4,9 +4,6 @@ const NotFoundError = require('../errors/not-found-err');
 const NotAllowedError = require('../errors/not-allowed-err');
 
 const handleError = (err) => {
-  if (err.name === 'MongoError') {
-    throw new Error(err.message);
-  }
   if (err.name === 'ValidationError' || err.name === 'CastError') {
     throw new BadRequestError(err.message);
   }
