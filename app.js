@@ -18,7 +18,11 @@ mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
 });
 
 const options = {
-  origin: ['http://localhost:3000'],
+  origin: ['http://localhost:3000',
+    'http://api.annakin.diploma.students.nomoredomains.monster',
+    'http://www.api.annakin.diploma.students.nomoredomains.monster',
+    'https://api.annakin.diploma.students.nomoredomains.monster',
+    'https://www.api.annakin.diploma.students.nomoredomains.monster'],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   preflightContinue: false,
   optionsSuccessStatus: 204,
