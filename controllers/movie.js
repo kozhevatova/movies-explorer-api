@@ -4,10 +4,11 @@ const NotFoundError = require('../errors/not-found-err');
 const NotAllowedError = require('../errors/not-allowed-err');
 
 const handleError = (err) => {
+  if (err.name === 'MongoError') {
+    throw new Error(err.message);
+  }
   if (err.name === 'ValidationError' || err.name === 'CastError') {
     throw new BadRequestError(err.message);
-  } else {
-    console.log(err.message);
   }
 };
 
@@ -27,7 +28,7 @@ module.exports.createMovie = (req, res, next) => {
     country, director, duration, year, description, image, trailer, thumbnail,
     nameRU, nameEN,
   } = req.body;
-  console.log(req.user._id);
+
   Movie.create({
     country,
     director,
@@ -36,10 +37,12 @@ module.exports.createMovie = (req, res, next) => {
     description,
     image,
     trailer,
-    nameRU,
-    nameEN,
     thumbnail,
     owner: req.user._id,
+    // для теста в postman, в дальнейщем movieId будет получен из стороннего api
+    movieId: req.user._id,
+    nameRU,
+    nameEN,
   })
     .then((movie) => res.send(movie))
     .catch((err) => handleError(err))

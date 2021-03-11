@@ -3,9 +3,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 const helmet = require('helmet');
-// const { celebrate, Joi } = require('celebrate');
+const { errors } = require('celebrate');
 const appRouter = require('./routes/index');
-const NotFoundError = require('./errors/not-found-err');
+const { requestLogger, errorLogger } = require('./middlewares/logger');
 
 const { PORT = 3000 } = process.env;
 const app = express();
@@ -31,11 +31,17 @@ app.use(helmet());
 // bodyParser deprecated
 app.use(express.json());
 
+// логгер запросов
+app.use(requestLogger);
+
+// роут
 app.use('/', appRouter);
 
-app.use((req, res, next) => {
-  next(new NotFoundError('Запрашиваемый ресурс не найден'));
-});
+// логгер ошибок
+app.use(errorLogger);
+
+// обработчик ошибок celebrate
+app.use(errors());
 
 // централизованный обработчик ошибок
 app.use((err, req, res, next) => {

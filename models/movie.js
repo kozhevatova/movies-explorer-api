@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const isUrl = require('validator/lib/isURL');
 
 const movieSchema = new mongoose.Schema({
   country: {
@@ -25,7 +26,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator: (v) => /^(https?):\/\/(www\.)?([\w/?.#-]+\.?)+\.[^\s]{2,}$/.test(v),
+      validator: (v) => isUrl(v),
       message: (props) => `${props.value} не валидный url картинки`,
     },
   },
@@ -33,7 +34,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator: (v) => /^(https?):\/\/(www\.)?([\w/?.#-]+\.?)+\.[^\s]{2,}$/.test(v),
+      validator: (v) => isUrl(v),
       message: (props) => `${props.value} не валидный url трейлера`,
     },
   },
@@ -41,7 +42,7 @@ const movieSchema = new mongoose.Schema({
     type: String,
     required: true,
     validate: {
-      validator: (v) => /^(https?):\/\/(www\.)?([\w/?.#-]+\.?)+\.[^\s]{2,}$/.test(v),
+      validator: (v) => isUrl(v),
       message: (props) => `${props.value} не валидный url миниатюрного изображения`,
     },
   },
@@ -50,10 +51,10 @@ const movieSchema = new mongoose.Schema({
     ref: 'user',
     required: true,
   },
-  // movieId: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   required: true,
-  // },
+  movieId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+  },
   nameRU: {
     type: String,
     required: true,
