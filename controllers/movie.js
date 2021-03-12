@@ -24,7 +24,7 @@ module.exports.getSavedMovies = (req, res, next) => {
 module.exports.createMovie = (req, res, next) => {
   const {
     country, director, duration, year, description, image, trailer, thumbnail,
-    nameRU, nameEN,
+    movieId, nameRU, nameEN,
   } = req.body;
 
   Movie.create({
@@ -37,8 +37,7 @@ module.exports.createMovie = (req, res, next) => {
     trailer,
     thumbnail,
     owner: req.user._id,
-    // для теста в postman, в дальнейщем movieId будет получен из стороннего api
-    movieId: req.user._id,
+    movieId,
     nameRU,
     nameEN,
   })
