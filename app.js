@@ -9,7 +9,7 @@ const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { limiter } = require('./utils/limiter');
 const { handleAllErrors } = require('./middlewares/handleAllErrors');
 
-const { PORT = 3000, DB_PATH } = process.env;
+const { PORT = 3000, DB_PATH = 'mongodb://localhost:27017/bitfilmsdb' } = process.env;
 const app = express();
 
 // подключение к серверу mongo
