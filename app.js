@@ -21,11 +21,10 @@ mongoose.connect(`${DB_PATH}`, {
 
 const options = {
   origin: ['http://localhost:3000',
-    // 'http://annakin.diploma.students.nomoredomains.monster',
-    // 'http://www.annakin.diploma.students.nomoredomains.monster',
-    // 'https://annakin.diploma.students.nomoredomains.monster',
-    // 'https://www.annakin.diploma.students.nomoredomains.monster'
-    'https://movies-explorer-frontend-delta.vercel.app',
+    'http://annakin.diploma.students.nomoredomains.monster',
+    'http://www.annakin.diploma.students.nomoredomains.monster',
+    'https://annakin.diploma.students.nomoredomains.monster',
+    'https://www.annakin.diploma.students.nomoredomains.monster'
   ],
   methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE'],
   preflightContinue: false,
